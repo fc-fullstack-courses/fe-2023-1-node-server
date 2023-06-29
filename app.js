@@ -2,6 +2,14 @@ const express = require('express');
 
 const app = express();
 
+const users = [
+  {
+    id: 0,
+    login: 'test',
+    password: '12345',
+  },
+];
+
 app.get(
   '/',
   (req, res, next) => {
@@ -22,6 +30,26 @@ app.get(
     res.send('<h1>hello from express</h1>');
   }
 );
+
+app.get('/users', (req, res, next) => {
+  res.send(users);
+});
+
+// розпарсить тіло запиту і покладе його в req.body
+const bodyParser = express.json();
+
+app.post('/users', bodyParser, (req, res, next) => {
+
+  const user = {
+    ...req.body,
+    id: Date.now()
+  }
+
+  users.push(user);
+
+  res.send(user);
+});
+
 // app.post();
 // app.put();
 // app.patch();
