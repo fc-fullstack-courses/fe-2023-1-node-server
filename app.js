@@ -1,13 +1,26 @@
 const express = require('express');
-const { validateUserSignUp } = require('./middlewares/validate.mv');
+const {
+  validateUserSignUp,
+  validateUserUpdate,
+} = require('./middlewares/validate.mv');
 const UserController = require('./controllers/userController');
+const { findUser } = require('./middlewares/user.mv');
 
 const app = express();
+const bodyParser = express.json();
 
 app.get('/users', UserController.getUsers);
+app.get('/users/:id', UserController.getUser);
+app.delete('/users/:id', UserController.deleteUser);
+app.put(
+  '/users/:id',
+  bodyParser,
+  validateUserUpdate,
+  findUser,
+  UserController.updateUser
+);
 
 // розпарсить тіло запиту і покладе його в req.body
-const bodyParser = express.json();
 
 app.post('/users', bodyParser, validateUserSignUp, UserController.createUser);
 

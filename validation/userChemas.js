@@ -8,3 +8,9 @@ const USER_CREATION_SCHEMA = yup.object({
 });
 
 module.exports.USER_CREATION_SCHEMA = USER_CREATION_SCHEMA;
+module.exports.USER_UPDATE_SCHEMA = yup.object({
+  login: yup.string(),
+  email: yup.string().email(),
+  password: yup.string(),
+  isMale: yup.bool(),
+});

@@ -26,29 +26,27 @@ class User {
   }
 
   static findOne(id) {
-    return Promise.resolve(db.get(id));
+    return Promise.resolve(db.get(+id));
   }
 
   static deleteById(id) {
-    return Promise.resolve(db.delete(id));
+    return Promise.resolve(db.delete(+id));
   }
 
   update(newUserData) {
     const oldUser = db.get(this.id);
 
-    const newUser = new User({
-      ...oldUser,
-      ...newUserData,
-    });
+    const updateEntries = Object.entries(newUserData);
 
-    const falseId = newUser.id;
-    newUser.id = this.id;
-    newUser.createdAt = oldUser.createdAt;
+    for(const [key, value] of updateEntries) {
+      oldUser[key] = value;
+    }
 
-    db.set(this.id, newUser);
-    db.delete(falseId);
+    oldUser.updatedAt = new Date();
 
-    return Promise.resolve(newUser);
+    db.set(oldUser.id, oldUser);
+
+    return Promise.resolve(oldUser);
   }
 }
 
