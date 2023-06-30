@@ -1,4 +1,5 @@
 const express = require('express');
+const { USER_CREATION_SCHEMA } = require('./validation/userChemas');
 
 const app = express();
 
@@ -38,17 +39,31 @@ app.get('/users', (req, res, next) => {
 // розпарсить тіло запиту і покладе його в req.body
 const bodyParser = express.json();
 
-app.post('/users', bodyParser, (req, res, next) => {
+app.post(
+  '/users',
+  bodyParser,
+  (req, res, next) => {
+    USER_CREATION_SCHEMA.validate(req.body)
+      .then((validatedUser) => {
+        console.log('user is valid');
+        next();
+      })
+      .catch((err) => {
+        console.log('user is invalid');
+        res.send(err.message);
+      });
+  },
+  (req, res, next) => {
+    const user = {
+      ...req.body,
+      id: Date.now(),
+    };
 
-  const user = {
-    ...req.body,
-    id: Date.now()
+    users.push(user);
+
+    res.send(user);
   }
-
-  users.push(user);
-
-  res.send(user);
-});
+);
 
 // app.post();
 // app.put();

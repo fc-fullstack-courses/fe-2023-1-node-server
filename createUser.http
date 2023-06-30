@@ -3,6 +3,6 @@ Content-Type: application/json
 
 {
   "login": "httpUser",
-  "password":"admin",
-  "email": "mail1@gmail.com"
+  "password":"",
+  "email": "21345"
 }
