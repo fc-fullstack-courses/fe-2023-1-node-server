@@ -1,59 +1,15 @@
 const express = require('express');
 const { validateUserSignUp } = require('./middlewares/validate.mv');
+const UserController = require('./controllers/userController');
 
 const app = express();
 
-const users = [
-  {
-    id: 0,
-    login: 'test',
-    password: '12345',
-  },
-];
-
-app.get(
-  '/',
-  (req, res, next) => {
-    console.log('first handler');
-    req.secret = '12345';
-    next();
-  },
-  (req, res, next) => {
-    console.log('second handler');
-    console.log(req.secret);
-    next();
-  },
-  (req, res, next) => {
-    // console.log(request);
-    // console.log(response);
-    console.log('last handler');
-    // res.end('<h1>hello from express</h1>');
-    res.send('<h1>hello from express</h1>');
-  }
-);
-
-app.get('/users', (req, res, next) => {
-  res.send(users);
-});
+app.get('/users', UserController.getUsers);
 
 // розпарсить тіло запиту і покладе його в req.body
 const bodyParser = express.json();
 
-app.post(
-  '/users',
-  bodyParser,
-  validateUserSignUp,
-  (req, res, next) => {
-    const user = {
-      ...req.body,
-      id: Date.now(),
-    };
-
-    users.push(user);
-
-    res.send(user);
-  }
-);
+app.post('/users', bodyParser, validateUserSignUp, UserController.createUser);
 
 // app.post();
 // app.put();
