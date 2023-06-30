@@ -19,7 +19,6 @@ app.put(
   findUser,
   UserController.updateUser
 );
-
 // розпарсить тіло запиту і покладе його в req.body
 
 app.post('/users', bodyParser, validateUserSignUp, UserController.createUser);
