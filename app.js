@@ -1,5 +1,5 @@
 const express = require('express');
-const { USER_CREATION_SCHEMA } = require('./validation/userChemas');
+const { validateUserSignUp } = require('./middlewares/validate.mv');
 
 const app = express();
 
@@ -42,17 +42,7 @@ const bodyParser = express.json();
 app.post(
   '/users',
   bodyParser,
-  (req, res, next) => {
-    USER_CREATION_SCHEMA.validate(req.body)
-      .then((validatedUser) => {
-        console.log('user is valid');
-        next();
-      })
-      .catch((err) => {
-        console.log('user is invalid');
-        res.send(err.message);
-      });
-  },
+  validateUserSignUp,
   (req, res, next) => {
     const user = {
       ...req.body,
